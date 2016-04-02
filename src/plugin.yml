@@ -1,0 +1,13 @@
+name: TModsServerAddons_Ranks
+main: me.tmods.serveraddons.Ranks
+version: 1.11
+author: Timo Hocker
+website: http://timosmods.weebly.com
+
+depends:
+ - TModsServerUtils
+
+commands:
+  rank:
+    description: all rank commands
+    usage: /rank <addPerm/removePerm/create/remove/info/permissions/list> [args]
