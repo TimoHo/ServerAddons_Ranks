@@ -67,7 +67,9 @@ public class PermissionExecutor {
 				p.removeAttachment(getAttachment(p));
 			}
 			PermissionAttachment a = attach(p);
-			setPermissions(getRank(p).getPermissions(),a);
+			if (getRank(p) != null) {
+				setPermissions(getRank(p).getPermissions(),a);
+			}
 		}
 		} catch (Exception e) {
 			Methods.log(e);

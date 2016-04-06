@@ -51,7 +51,7 @@ public class Ranks extends JavaPlugin implements Listener{
 				e.printStackTrace();
 			}
 		}
-		if (ranks.getConfigurationSection("Ranks") == null) {
+		if (ranks.getConfigurationSection("Ranks") == null || pexec.getDefaultRank() == null) {
 			List<String> perm = new ArrayList<String>();
 			Rank r = new Rank("Guest", perm, "[Guest] ", ": ", true);
 			r.toConfig(ranks, "Ranks.Guest");

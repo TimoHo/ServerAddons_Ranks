@@ -40,7 +40,9 @@ public class RankListener implements Listener{
 				}
 			}
 		} else {
-			pexec.setPermissions(pexec.getDefaultRank().getPermissions(), a);
+			if (pexec.getDefaultRank() != null) {
+				pexec.setPermissions(pexec.getDefaultRank().getPermissions(), a);
+			}
 			ranks.set("Players." + e.getPlayer().getUniqueId(), pexec.getDefaultRank().getName());
 			try {
 				ranks.save(Ranks.rankf);
@@ -55,8 +57,10 @@ public class RankListener implements Listener{
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 		try {
-		e.setCancelled(true);
-		Bukkit.broadcastMessage(pexec.getRank(e.getPlayer()).getPrefix() + e.getPlayer().getDisplayName() + pexec.getRank(e.getPlayer()).getSuffix() + e.getMessage());
+			if (pexec.getRank(e.getPlayer()) != null) {
+				e.setCancelled(true);
+				Bukkit.broadcastMessage(pexec.getRank(e.getPlayer()).getPrefix() + e.getPlayer().getDisplayName() + pexec.getRank(e.getPlayer()).getSuffix() + e.getMessage());
+			}
 		} catch (Exception e1) {
 			Methods.log(e1);
 		}
