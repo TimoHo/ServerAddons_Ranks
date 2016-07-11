@@ -21,10 +21,8 @@ import me.tmods.serverutils.Methods;
 public class Ranks extends JavaPlugin implements Listener{
 
 	public static File rankf = new File("plugins/TModsServerUtils","ranks.yml");
-	public File langf = new File("plugins/TModsServerUtils","lang.yml");
 	public File cfgf = new File("plugins/TModsServerUtils","config.yml");
 	public static FileConfiguration ranks = YamlConfiguration.loadConfiguration(rankf);
-	public FileConfiguration lang = YamlConfiguration.loadConfiguration(langf);
 	public FileConfiguration cfg = YamlConfiguration.loadConfiguration(cfgf);
 	public List<Rank> serverRanks = new ArrayList<Rank>();
 	public PermissionExecutor pexec;
@@ -74,9 +72,14 @@ public class Ranks extends JavaPlugin implements Listener{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		try {
+		if (args.length > 0) {
+			for (int i = 0;i<args.length;i++) {
+				args[i] = args[i].replace("[#]", "");
+			}
+		}
 		if (cmd.getName().equalsIgnoreCase("rank")) {
 			if (!sender.hasPermission("ServerAddons.manageRanks")) {
-				sender.sendMessage(Methods.getLang("permdeny"));
+				sender.sendMessage("you don't have access to that command!");
 				return true;
 			}
 			if (args.length > 0) {
@@ -94,11 +97,11 @@ public class Ranks extends JavaPlugin implements Listener{
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						sender.sendMessage(Methods.getLang("rankpermadded"));
+						sender.sendMessage("permission added.");
 						pexec.reloadRanks();
 						return true;
 					} else {
-						sender.sendMessage(Methods.getLang("nsrank"));
+						sender.sendMessage("no such rank");
 						return true;
 					}
 				}
@@ -116,11 +119,11 @@ public class Ranks extends JavaPlugin implements Listener{
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						sender.sendMessage(Methods.getLang("rankpermremoved"));
+						sender.sendMessage("permission removed");
 						pexec.reloadRanks();
 						return true;
 					} else {
-						sender.sendMessage(Methods.getLang("nsrank"));
+						sender.sendMessage("no such rank");
 						return true;
 					}
 				}
@@ -130,7 +133,7 @@ public class Ranks extends JavaPlugin implements Listener{
 						return true;
 					}
 					if (Bukkit.getPlayer(args[1]) == null) {
-						sender.sendMessage(Methods.getLang("notonline"));
+						sender.sendMessage("this player is not online");
 						return true;
 					}
 					Player p = Bukkit.getPlayer(args[1]);
@@ -153,7 +156,7 @@ public class Ranks extends JavaPlugin implements Listener{
 					}
 					Player p = Bukkit.getPlayer(args[1]);
 					if (p == null) {
-						sender.sendMessage(Methods.getLang("notonline"));
+						sender.sendMessage("this player is not online");
 						return true;
 					}
 					sender.sendMessage("Permissions of " + args[1] + " in Rank " + pexec.getRank(p).getName());
@@ -172,7 +175,7 @@ public class Ranks extends JavaPlugin implements Listener{
 					}
 					Rank r = Rank.fromConfig(ranks, "Ranks." + args[2]);
 					if (r == null) {
-						sender.sendMessage(Methods.getLang("nsrank"));
+						sender.sendMessage("no such rank");
 						return true;
 					}
 					if (Bukkit.getPlayer(args[1]) != null) {
@@ -183,10 +186,10 @@ public class Ranks extends JavaPlugin implements Listener{
 							e.printStackTrace();
 						}
 						pexec.reloadRanks();
-						sender.sendMessage(Methods.getLang("rankset"));
+						sender.sendMessage("rank set");
 						return true;
 					} else {
-						sender.sendMessage(Methods.getLang("notonline"));
+						sender.sendMessage("this player is not online");
 						return true;
 					}
 				}
@@ -197,7 +200,7 @@ public class Ranks extends JavaPlugin implements Listener{
 					}
 					if (pexec.getDefaultRank() != null && Boolean.valueOf(args[4])) {
 						ranks.set("Ranks." + pexec.getDefaultRank().getName() + ".default", false);
-						sender.sendMessage(Methods.getLang("defrep"));
+						sender.sendMessage("default rank replaced");
 					}
 					String name = args[1].replace("&", "§");
 					String prefix = args[2].replace("&", "§") + " ";
@@ -220,11 +223,11 @@ public class Ranks extends JavaPlugin implements Listener{
 						return true;
 					}
 					if (ranks.getBoolean("Ranks." + args[1] + ".default")) {
-						sender.sendMessage(Methods.getLang("defrankwarn"));
+						sender.sendMessage("this rank is default! please create another default rank before deleting this!");
 						return true;
 					}
 					if (Rank.fromConfig(ranks, "Ranks." + args[1]) == null) {
-						sender.sendMessage(Methods.getLang("nsrank"));
+						sender.sendMessage("no such rank");
 						return true;
 					}
 					ranks.set("Ranks." + args[1], null);
@@ -258,7 +261,7 @@ public class Ranks extends JavaPlugin implements Listener{
 						}
 						sender.sendMessage("prefix set.");
 					} else {
-						sender.sendMessage(Methods.getLang("nsrank"));
+						sender.sendMessage("no such rank");
 					}
 					return true;
 				}
@@ -277,7 +280,7 @@ public class Ranks extends JavaPlugin implements Listener{
 						}
 						sender.sendMessage("suffix set.");
 					} else {
-						sender.sendMessage(Methods.getLang("nsrank"));
+						sender.sendMessage("no such rank");
 					}
 					return true;
 				}

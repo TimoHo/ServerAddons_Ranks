@@ -97,6 +97,6 @@ public class PermissionExecutor {
 		} catch (Exception e) {
 			Methods.log(e);
 		}
-		return null;		
+		return getDefaultRank();
 	}
 }
